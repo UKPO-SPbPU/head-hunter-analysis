@@ -1,20 +1,17 @@
-import client.HeadHunterApiClient;
-import parameters.AreaConverter;
-import utils.URLBuilder;
-import utils.URLS;
+import collector.client.HeadHunterApiClient;
+import collector.client.utils.URLBuilder;
+import collector.client.utils.URLS;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Main {
 
-    private static final AreaConverter AREA_CONVERTER = new AreaConverter();
+    private static AtomicLong startId = new AtomicLong(23878600);
 
     public static void main(String[] args) throws Exception {
         URLBuilder urlBuilder = new URLBuilder(URLS.VACANCIES.getUrl());
-        String url = urlBuilder.addAreaId(AREA_CONVERTER.convert("Москва"))
-                .addNumberPage(1)
-                .addPerPage(20)
-                .addText("scala")
-                .build();
+        String url = urlBuilder.addPartOfUrl(startId.toString()).build();
         new HeadHunterApiClient().doRequset(url);
     }
 

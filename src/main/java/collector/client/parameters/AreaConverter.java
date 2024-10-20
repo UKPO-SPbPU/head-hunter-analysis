@@ -1,4 +1,4 @@
-package parameters;
+package collector.client.parameters;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;

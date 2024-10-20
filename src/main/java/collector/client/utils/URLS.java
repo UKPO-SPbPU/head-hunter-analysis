@@ -1,4 +1,4 @@
-package utils;
+package collector.client.utils;
 
 public enum URLS {
 
