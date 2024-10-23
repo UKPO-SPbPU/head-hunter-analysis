@@ -1,5 +1,8 @@
-package collector.client.utils;
+package collector.utils;
 
+/**
+ * Перечисление end point HH api
+ */
 public enum URLS {
 
     BASE("https://api.hh.ru/"),

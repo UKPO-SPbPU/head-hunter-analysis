@@ -1,4 +1,4 @@
-package collector.client;
+package collector.clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,20 +12,21 @@ import java.net.URL;
  */
 public class HeadHunterApiClient {
 
-    public void doRequset(String stringUrl) throws IOException {
+    public String doRequset(String stringUrl) throws IOException {
         HttpURLConnection conn = getHttpURLConnection(stringUrl);
+        StringBuilder response = new StringBuilder();
         if (validateResponseCode(conn)) {
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
-            StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
-            System.out.println("Response: " + response);
         } else {
             System.out.println("GET запрос не сработал. Код ответа: " + conn.getResponseCode());
+            return "NULL";
         }
+        return response.toString();
     }
 
     private HttpURLConnection getHttpURLConnection(String stringUrl) throws IOException {

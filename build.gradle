@@ -19,12 +19,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.google.code.gson:gson'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.12.0'
-
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.34'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+    implementation 'org.mongodb:mongodb-driver-sync:4.10.2'
+    implementation 'org.mongodb:mongodb-driver-core:4.10.2'
 
 }
 
