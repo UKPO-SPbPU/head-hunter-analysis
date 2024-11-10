@@ -12,10 +12,13 @@ import java.net.URL;
  */
 public class HeadHunterApiClient {
 
+    protected static final String USER_AGENT_PROP = "user_agent";
+    protected static final String TOKEN_PROP = "token";
+
     public String doRequset(String stringUrl) throws IOException {
         HttpURLConnection conn = getHttpURLConnection(stringUrl);
         StringBuilder response = new StringBuilder();
-        if (validateResponseCode(conn)) {
+        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -23,9 +26,11 @@ public class HeadHunterApiClient {
             }
             in.close();
         } else {
-            System.out.println("GET запрос не сработал. Код ответа: " + conn.getResponseCode());
+            System.out.println("Ззапрос не сработал. Код ответа: " + conn.getResponseCode() + " URL " + stringUrl);
+            conn.disconnect();
             return "NULL";
         }
+        conn.disconnect();
         return response.toString();
     }
 
@@ -33,12 +38,9 @@ public class HeadHunterApiClient {
         URL url = new URL(stringUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+        conn.setRequestProperty("User-Agent", System.getProperty(USER_AGENT_PROP));
+        conn.setRequestProperty("Authorization", "Bearer " + System.getProperty(TOKEN_PROP));
         return conn;
-    }
-
-    private boolean validateResponseCode(HttpURLConnection conn) throws IOException {
-        return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
     }
 
 }

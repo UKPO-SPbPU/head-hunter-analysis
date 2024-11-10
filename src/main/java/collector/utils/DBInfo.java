@@ -1,7 +1,5 @@
 package collector.utils;
 
-import collector.Collector;
-
 import java.util.logging.Logger;
 
 /**
