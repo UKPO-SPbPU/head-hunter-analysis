@@ -20,7 +20,7 @@ public class PropertiesHelper {
         try (FileInputStream inStream = new FileInputStream(String.format(FILE_NAME, propertiesFile))) {
             properties.load(inStream);
         } catch (FileNotFoundException e) {
-            throw new IllegalStateException("Не удалось найти файл" + propertiesFile, e);
+            throw new IllegalStateException("Не удалось найти файл " + propertiesFile, e);
         } catch (IOException e) {
             throw new IllegalStateException("Generic IO error с файлом " + propertiesFile, e);
         }

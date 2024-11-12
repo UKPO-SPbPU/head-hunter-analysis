@@ -23,17 +23,21 @@ import static parser.utils.Fields.WORKING_TIME_INTERVALS;
 import static parser.utils.Fields.WORKING_TIME_MODES;
 
 /**
- * Фильтр JSONObject на основе Fields.java
+ * Фильтр JSONObject на основе Fields.java для отбора нужных полей
  */
-public class JSONFilter {
+public class FieldsFilter {
 
     public static JSONObject filter(JSONObject jsonObject) {
         JSONObject newJsonObjet = new JSONObject();
         newJsonObjet.put(ID.getField(), jsonObject.getString(ID.getField()));
         newJsonObjet.put(NAME.getField(), jsonObject.getString(NAME.getField()));
         newJsonObjet.put(DESCRIPTION.getField(), jsonObject.getString(DESCRIPTION.getField()));
-        newJsonObjet.put(EMPLOYER.getField(), jsonObject.getJSONObject(EMPLOYER.getField()));
-        newJsonObjet.put(EMPLOYMENT.getField(), jsonObject.getJSONObject(EMPLOYMENT.getField()));
+        newJsonObjet.put(EMPLOYER.getField(),
+                jsonObject.isNull(EMPLOYER.getField()) ? null : jsonObject.getJSONObject(EMPLOYER.getField())
+        );
+        newJsonObjet.put(EMPLOYMENT.getField(),
+                jsonObject.isNull(EMPLOYMENT.getField()) ? null : jsonObject.getJSONObject(EMPLOYMENT.getField()))
+        ;
         newJsonObjet.put(EXPERIENCE.getField(), jsonObject.getJSONObject(EXPERIENCE.getField()));
         newJsonObjet.put(ACCEPT_HANDICAPPED.getField(), jsonObject.getBoolean(ACCEPT_HANDICAPPED.getField()));
         newJsonObjet.put(ACCEPT_TEMPORARY.getField(), jsonObject.getBoolean(ACCEPT_TEMPORARY.getField()));
@@ -42,11 +46,19 @@ public class JSONFilter {
         newJsonObjet.put(PUBLISHED_AT.getField(), jsonObject.getString(PUBLISHED_AT.getField()));
         newJsonObjet.put(KEY_SKILLS.getField(), jsonObject.getJSONArray(KEY_SKILLS.getField()));
         newJsonObjet.put(PROFESSIONAL_ROLES.getField(), jsonObject.getJSONArray(PROFESSIONAL_ROLES.getField()));
-        newJsonObjet.put(SALARY.getField(), jsonObject.getJSONObject(SALARY.getField()));
+        newJsonObjet.put(SALARY.getField(),
+                jsonObject.isNull(SALARY.getField()) ? null : jsonObject.getJSONObject(SALARY.getField())
+        );
         newJsonObjet.put(SCHEDULE.getField(), jsonObject.getJSONObject(SCHEDULE.getField()));
-        newJsonObjet.put(WORKING_DAYS.getField(), jsonObject.getJSONArray(WORKING_DAYS.getField()));
-        newJsonObjet.put(WORKING_TIME_INTERVALS.getField(), jsonObject.getJSONArray(WORKING_TIME_INTERVALS.getField()));
-        newJsonObjet.put(WORKING_TIME_MODES.getField(), jsonObject.getJSONArray(WORKING_TIME_MODES.getField()));
+        newJsonObjet.put(WORKING_DAYS.getField(),
+                jsonObject.isNull(WORKING_DAYS.getField()) ? null : jsonObject.getJSONArray(WORKING_DAYS.getField())
+        );
+        newJsonObjet.put(WORKING_TIME_INTERVALS.getField(),
+                jsonObject.isNull(WORKING_TIME_INTERVALS.getField()) ? null : jsonObject.getJSONArray(WORKING_TIME_INTERVALS.getField())
+        );
+        newJsonObjet.put(WORKING_TIME_MODES.getField(),
+                jsonObject.isNull(WORKING_TIME_MODES.getField()) ? null : jsonObject.getJSONArray(WORKING_TIME_MODES.getField())
+        );
         return newJsonObjet;
     }
 
