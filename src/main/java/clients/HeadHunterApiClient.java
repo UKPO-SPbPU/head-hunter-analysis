@@ -1,10 +1,11 @@
-package collector.clients;
+package clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * ApiClient для работы с HH
@@ -12,10 +13,13 @@ import java.net.URL;
  */
 public class HeadHunterApiClient {
 
+    private static final Logger LOGGER = Logger.getLogger(HeadHunterApiClient.class.getName());
+
     protected static final String USER_AGENT_PROP = "user_agent";
     protected static final String TOKEN_PROP = "token";
 
     public String doRequset(String stringUrl) throws IOException {
+        LOGGER.info("Отправляем запрос на HH: " + stringUrl);
         HttpURLConnection conn = getHttpURLConnection(stringUrl);
         StringBuilder response = new StringBuilder();
         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -26,7 +30,7 @@ public class HeadHunterApiClient {
             }
             in.close();
         } else {
-            System.out.println("Ззапрос не сработал. Код ответа: " + conn.getResponseCode() + " URL " + stringUrl);
+            LOGGER.warning("Ззапрос не сработал. Код ответа: " + conn.getResponseCode() + " URL " + stringUrl);
             conn.disconnect();
             return "NULL";
         }

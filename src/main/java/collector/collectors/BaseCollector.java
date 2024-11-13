@@ -1,7 +1,7 @@
 package collector.collectors;
 
-import collector.clients.HeadHunterApiClient;
-import collector.clients.MongoDBClient;
+import clients.HeadHunterApiClient;
+import clients.MongoDBClient;
 import collector.utils.DBInfo;
 import collector.utils.URLBuilder;
 import collector.utils.URLS;

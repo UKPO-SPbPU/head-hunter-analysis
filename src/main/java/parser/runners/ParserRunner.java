@@ -1,6 +1,6 @@
-package parser;
+package parser.runners;
 
-import collector.clients.MongoDBClient;
+import clients.MongoDBClient;
 import collector.utils.DBInfo;
 import org.bson.Document;
 import org.json.JSONException;

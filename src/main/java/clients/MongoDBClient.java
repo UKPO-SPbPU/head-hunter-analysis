@@ -1,13 +1,11 @@
-package collector.clients;
+package clients;
 
-import collector.utils.PropertiesHelper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Projections;
 import org.bson.Document;
 import org.json.JSONObject;
-import org.springframework.expression.spel.ast.Projection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class MongoDBClient {
 
-    private static final Logger LOGGER = Logger.getLogger(PropertiesHelper.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MongoDBClient.class.getName());
     private final MongoClient mongoClient;
 
     public MongoDBClient(String connectionUrl) {
