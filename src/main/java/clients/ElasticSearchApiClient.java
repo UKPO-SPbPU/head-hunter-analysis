@@ -74,6 +74,10 @@ public class ElasticSearchApiClient {
 
         restClient = RestClient
                 .builder(new HttpHost(host, port, scheme))
+                .setRequestConfigCallback(requestConfigBuilder ->
+                        requestConfigBuilder
+                                .setConnectTimeout(5000)
+                                .setSocketTimeout(60000))
                 .setHttpClientConfigCallback(httpAsyncClientBuilder -> httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider))
                 .build();
         elasticsearchClient = new ElasticsearchClient(new RestClientTransport(restClient, new JacksonJsonpMapper()));

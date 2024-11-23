@@ -2,16 +2,9 @@ package elk;
 
 import clients.ElasticSearchApiClient;
 import clients.MongoDBClient;
-import co.elastic.clients.elasticsearch.core.search.Hit;
 import collector.utils.DBInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoCursor;
-import elk.utils.DTO.Vacancy;
-import org.bson.Document;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 import static collector.utils.PropertiesHelper.loadProperties;
@@ -31,8 +24,13 @@ public class ElasticSearchRunner {
 
     public static void main(String[] args) {
         LOGGER.info("Запускаем раннер для загрузки данных из Mongo в Elasticsearch");
-        loadProperties(DB_PARSE_2019_PROP_FILE);
         loadProperties(ELASTIC_SEARCH_PROP_FILE);
+        downloadDataFromDB(DB_PARSE_2019_PROP_FILE);
+        downloadDataFromDB(DB_PARSE_2024_PROP_FILE);
+    }
+
+    private static void downloadDataFromDB(String dbProperties) {
+        loadProperties(dbProperties);
 
         LOGGER.info("Создаем клиент для работы с MongoDB");
         DBInfo dbInfo = new DBInfo();
@@ -47,7 +45,8 @@ public class ElasticSearchRunner {
             elasticSearchApiClient.createIndex(index);
         }
 
-        LOGGER.info("Загрузка данных из Mongo DB: " + dbInfo.getDataBase() + " Collection: " + dbInfo.getCollection()
+        LOGGER.info("Загрузка данных из Mongo DB: " + dbInfo.getDataBase()
+                + " Collection: " + dbInfo.getCollection()
                 + " в ElasticSearch в Index: " + index);
         try (var cursor = dbClient.getCursor(dbInfo.getDataBase(), dbInfo.getCollection())) {
             elasticSearchApiClient.downloadDatFromMongo(cursor, index);
@@ -56,7 +55,6 @@ public class ElasticSearchRunner {
         } finally {
             elasticSearchApiClient.close();
         }
-
         LOGGER.info("Загрузили все данные в индекс " + index);
     }
 
