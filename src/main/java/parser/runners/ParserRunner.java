@@ -30,19 +30,21 @@ public class ParserRunner {
     private static final String DB_2019_PROP_FILE = "mongo2019";
     protected static final String DB_PARSE_2024_PROP_FILE = "mongoparse2024";
     private static final String DB_2024_PROP_FILE = "mongo2024";
-
     private static final int ONCE_COUNT_DOCUMENTS = 25_000;
-    private static final int COUNT_DOCUMENTS_IN_2024_COLLECTION = 7_211_448;
-    private static final int COUNT_DOCUMENTS_IN_2019_COLLECTION = 4_516_727;
-
     private static final String ANSWER_FIELD = "answer";
 
     public static void main(String[] args) {
         LOGGER.info("Запускаем парсер данных из Mongo");
-        loadProperties(DB_2019_PROP_FILE);
-        DBInfo dbInfo = new DBInfo();
+        parseData(DB_2019_PROP_FILE, DB_PARSE_2019_PROP_FILE);
+        parseData(DB_2024_PROP_FILE, DB_PARSE_2024_PROP_FILE);
+    }
+
+    private static void parseData(String properties1, String properties2) {
+        loadProperties(properties1);
+        final DBInfo dbInfo = new DBInfo();
         MongoDBClient dbClient = new MongoDBClient(dbInfo.getConnectionUrl());
-        for (int i = 0; i <= COUNT_DOCUMENTS_IN_2019_COLLECTION / ONCE_COUNT_DOCUMENTS; i++) {
+        long countDocument = dbClient.getCountDocument(dbInfo.getDataBase(), dbInfo.getCollection());
+        for (int i = 0; i <= countDocument / ONCE_COUNT_DOCUMENTS; i++) {
             LOGGER.info("Начали фильтрацию от " + i * ONCE_COUNT_DOCUMENTS + " до " + (i + 1) * ONCE_COUNT_DOCUMENTS);
 
             LOGGER.info("Выгружаем данные и парсим");
@@ -62,7 +64,7 @@ public class ParserRunner {
             });
 
             LOGGER.info("Фильтруем по professional_roles");
-            loadProperties(DB_PARSE_2019_PROP_FILE);
+            loadProperties(properties2);
             final DBInfo dbInfo2 = new DBInfo();
             List<JSONObject> iTVacancies = vacancies.stream().filter(new ITFilter()).toList();
 
@@ -70,10 +72,7 @@ public class ParserRunner {
             List<JSONObject> iTVacanciesCorrectFields = iTVacancies.stream().map(FieldsFilter::filter).toList();
 
             LOGGER.info("Загружаем " + iTVacanciesCorrectFields.size() + " вакансий");
-            iTVacanciesCorrectFields.forEach(vac -> {
-                dbClient.insertInfoInDB(vac, dbInfo2.getDataBase(), dbInfo2.getCollection());
-            });
-            System.out.println();
+            iTVacanciesCorrectFields.forEach(vac -> dbClient.insertInfoInDB(vac, dbInfo2.getDataBase(), dbInfo2.getCollection()));
         }
         dbClient.close();
     }

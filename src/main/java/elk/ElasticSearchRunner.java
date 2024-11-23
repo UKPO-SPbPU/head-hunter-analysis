@@ -54,6 +54,7 @@ public class ElasticSearchRunner {
             throw new RuntimeException(e);
         } finally {
             elasticSearchApiClient.close();
+            dbClient.close();
         }
         LOGGER.info("Загрузили все данные в индекс " + index);
     }

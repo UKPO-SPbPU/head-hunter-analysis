@@ -25,6 +25,13 @@ public class MongoDBClient {
         mongoClient = MongoClients.create(connectionUrl);
     }
 
+    /**
+     * Загружаем данные в Базу данных
+     *
+     * @param info - данные
+     * @param dataBase - база данных
+     * @param collectionName - коллекция
+     */
     public void insertInfoInDB(String info, String dataBase, String collectionName) {
         MongoCollection<Document> collection = mongoClient.getDatabase(dataBase)
                 .getCollection(collectionName);
@@ -32,6 +39,13 @@ public class MongoDBClient {
         collection.insertOne(doc);
     }
 
+    /**
+     * Загружаем данные в Базу данных
+     *
+     * @param jsonObject - данные
+     * @param dataBase - база данных
+     * @param collectionName - коллекция
+     */
     public void insertInfoInDB(JSONObject jsonObject, String dataBase, String collectionName) {
         MongoCollection<Document> collection = mongoClient.getDatabase(dataBase)
                 .getCollection(collectionName);
@@ -39,6 +53,16 @@ public class MongoDBClient {
         collection.insertOne(doc);
     }
 
+    /**
+     * Возвращает документы из коллекции
+     *
+     * @param dataBase - база данных
+     * @param collectionName - коллекция
+     * @param limit - максимальное количество
+     * @param skip - количество пропускаемых документов с начала
+     *
+     * @return - лист докуметнов
+     */
     public List<Document> getDocuments(String dataBase, String collectionName, int limit, int skip) {
         return mongoClient.getDatabase(dataBase)
                 .getCollection(collectionName)
@@ -49,10 +73,32 @@ public class MongoDBClient {
                 .into(new ArrayList<>());
     }
 
-    public MongoCursor<Document> getCursor(String dataBaseName, String collectionName) {
-        return mongoClient.getDatabase(dataBaseName).getCollection(collectionName).find().projection(Projections.exclude("_id")).iterator();
+    /**
+     * Возвращает итераратор по коллекции
+     *
+     * @param dataBase - база данных
+     * @param collectionName - коллекция
+     *
+     * @return - итератор
+     */
+    public MongoCursor<Document> getCursor(String dataBase, String collectionName) {
+        return mongoClient.getDatabase(dataBase).getCollection(collectionName).find().projection(Projections.exclude("_id")).iterator();
     }
 
+    /**
+     * Возвращае количество документов в коллекции
+     *
+     * @param dataBase - база данных
+     * @param collectionName - коллекция
+     * @return количество документов
+     */
+    public long getCountDocument(String dataBase, String collectionName) {
+        return mongoClient.getDatabase(dataBase).getCollection(collectionName).countDocuments();
+    }
+
+    /**
+     * Закрваем подключение к базе данных
+     */
     public void close() {
         LOGGER.info("Закрываем DB клиент");
         mongoClient.close();
