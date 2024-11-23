@@ -3,6 +3,7 @@ package clients;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Projections;
 import org.bson.Document;
 import org.json.JSONObject;
@@ -46,6 +47,10 @@ public class MongoDBClient {
                 .skip(skip)
                 .limit(limit)
                 .into(new ArrayList<>());
+    }
+
+    public MongoCursor<Document> getCursor(String dataBaseName, String collectionName) {
+        return mongoClient.getDatabase(dataBaseName).getCollection(collectionName).find().projection(Projections.exclude("_id")).iterator();
     }
 
     public void close() {
