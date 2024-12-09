@@ -69,6 +69,74 @@ public class Vacancy {
     @JsonProperty("schedule")
     private Schedule schedule;
 
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public Salary getSalary() {
+        return salary;
+    }
+
+    public Employer getEmployer() {
+        return employer;
+    }
+
+    public Experience getExperience() {
+        return experience;
+    }
+
+    public Employment getEmployment() {
+        return employment;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Boolean getAccept_temporary() {
+        return accept_temporary;
+    }
+
+    public Boolean getAcceptHandicapped() {
+        return acceptHandicapped;
+    }
+
+    public String getInitialCreatedAt() {
+        return initialCreatedAt;
+    }
+
+    public String getPublishedAt() {
+        return publishedAt;
+    }
+
+    public List<WorkingTimeModes> getWorkingTimeModes() {
+        return workingTimeModes;
+    }
+
+    public List<WorkingTimeIntervals> getWorkingTimeIntervals() {
+        return workingTimeIntervals;
+    }
+
+    public List<WorkingDays> getWorkingDays() {
+        return workingDays;
+    }
+
+    public List<ProfessionalRole> getProfessionalRoles() {
+        return professionalRoles;
+    }
+
+    public List<KeySkill> getKeySkills() {
+        return keySkills;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public Long getId() {
         return id;
     }

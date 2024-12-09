@@ -29,7 +29,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.bson.Document;
 import org.elasticsearch.client.RestClient;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -113,14 +112,14 @@ public class ElasticSearchApiClient {
                 .mappings(m -> m
                         .properties("area", Property.of(p -> p
                                 .object(o -> o
-                                        .properties("name", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
+                                        .properties("name", Property.of(p2 -> p2.keyword(KeywordProperty.of(tp -> tp))))
                                         .properties("id", Property.of(p2 -> p2.long_(LongNumberProperty.of(kp -> kp))))
                                         .properties("url", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
                                 )
                         ))
                         .properties("key_skills", Property.of(p -> p
                                 .nested(n -> n
-                                        .properties("name", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
+                                        .properties("name", Property.of(p2 -> p2.keyword(KeywordProperty.of(tp -> tp))))
                                 )
                         ))
                         .properties("initial_created_at", Property.of(p -> p
@@ -216,14 +215,14 @@ public class ElasticSearchApiClient {
                 .index(indexName)
                 .properties("area", Property.of(p -> p
                         .object(o -> o
-                                .properties("name", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
+                                .properties("name", Property.of(p2 -> p2.keyword(KeywordProperty.of(tp -> tp))))
                                 .properties("id", Property.of(p2 -> p2.long_(LongNumberProperty.of(kp -> kp))))
                                 .properties("url", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
                         )
                 ))
                 .properties("key_skills", Property.of(p -> p
                         .nested(n -> n
-                                .properties("name", Property.of(p2 -> p2.text(TextProperty.of(tp -> tp))))
+                                .properties("name", Property.of(p2 -> p2.keyword(KeywordProperty.of(tp -> tp))))
                         )
                 ))
                 .properties("initial_created_at", Property.of(p -> p
@@ -356,6 +355,7 @@ public class ElasticSearchApiClient {
         LOGGER.info("Загружаем данные из MongoDB в ElasticSearch с помощью Bulk");
         List<BulkOperation> bulkOperations = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
+        int count = 0;
         while (cursor.hasNext()) {
             Document doc = cursor.next();
             Optional<Vacancy> vacancy = Optional.empty();
