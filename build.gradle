@@ -32,3 +32,47 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+springBoot {
+    mainClass.set("") // Явно очищает main-класс, чтобы Spring Boot не искал его
+}
+
+// Отключение bootJar
+tasks.named('bootJar') {
+    enabled = false
+}
+
+tasks.named('jar') {
+    enabled = true
+}
+
+// Настройка задач для каждого JAR
+task createParserJar(type: Jar) {
+    archiveBaseName.set("parser")
+    destinationDirectory.set(file("$buildDir/libs"))
+    manifest {
+        attributes 'Main-Class': 'parser.runners.ParserRunner'
+    }
+    from sourceSets.main.output
+}
+
+task createMongoLoaderJar(type: Jar) {
+    archiveBaseName.set("mongo-loader")
+    destinationDirectory.set(file("$buildDir/libs"))
+    manifest {
+        attributes 'Main-Class': 'collector.runners.DownloadVacanciesRunner'
+    }
+    from sourceSets.main.output
+}
+
+task createElasticLoaderJar(type: Jar) {
+    archiveBaseName.set("elastic-loader")
+    destinationDirectory.set(file("$buildDir/libs"))
+    manifest {
+        attributes 'Main-Class': 'elk.ElasticSearchRunner'
+    }
+    from sourceSets.main.output
+}
+
+// Добавление всех задач в зависимость от 'build'
+build.dependsOn createParserJar, createMongoLoaderJar, createElasticLoaderJar
