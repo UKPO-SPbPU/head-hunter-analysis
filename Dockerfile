@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine
+FROM amazoncorretto:21
 LABEL description="Образ для ручного запуска программ"
 
 COPY ./scripts/run-parser.sh /usr/local/bin/run-parser
@@ -8,6 +8,5 @@ RUN chmod +x /usr/local/bin/run-parser /usr/local/bin/run-mongo-loader /usr/loca
 
 WORKDIR /app
 COPY . .
-RUN ./gradlew build
 
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]

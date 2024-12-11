@@ -17,7 +17,7 @@ public class DBInfo {
     private final String collection;
 
     public DBInfo() {
-        LOGGER.info("Инициализируем DBInfo");
+        LOGGER.info("Initializing DBInfo");
         connectionUrl = System.getProperty(DB_CONNECTION_URL_PROP);
         dataBase = System.getProperty(DB_NAME_PROP);
         collection = System.getProperty(COLLECTION_NAME_PROP);

@@ -1,3 +1,13 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "C:/Users/avsro/.jdks/corretto-17.0.7",
+            "default": true
+        },
+    ],
+    "java.project.sourcePaths": [
+        "src/main/java"
+    ]
 }

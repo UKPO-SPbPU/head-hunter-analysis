@@ -19,7 +19,7 @@ public class HeadHunterApiClient {
     protected static final String TOKEN_PROP = "token";
 
     public String doRequset(String stringUrl) throws IOException {
-        LOGGER.info("Отправляем запрос на HH: " + stringUrl);
+        LOGGER.info("Sending a request to HH: " + stringUrl);
         HttpURLConnection conn = getHttpURLConnection(stringUrl);
         StringBuilder response = new StringBuilder();
         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -30,7 +30,7 @@ public class HeadHunterApiClient {
             }
             in.close();
         } else {
-            LOGGER.warning("Ззапрос не сработал. Код ответа: " + conn.getResponseCode() + " URL " + stringUrl);
+            LOGGER.warning("The request did not work. Response code: " + conn.getResponseCode() + " URL " + stringUrl);
             conn.disconnect();
             return "NULL";
         }

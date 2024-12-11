@@ -23,7 +23,7 @@ public class ElasticSearchRunner {
     private static final String ES_VACANCY_PROP = "index";
 
     public static void main(String[] args) {
-        LOGGER.info("Запускаем раннер для загрузки данных из Mongo в Elasticsearch");
+        LOGGER.info("Launching a runner to upload data from Mongo to Elasticsearch");
         loadProperties(ELASTIC_SEARCH_PROP_FILE);
         downloadDataFromDB(DB_PARSE_2019_PROP_FILE);
         downloadDataFromDB(DB_PARSE_2024_PROP_FILE);
@@ -32,22 +32,22 @@ public class ElasticSearchRunner {
     private static void downloadDataFromDB(String dbProperties) {
         loadProperties(dbProperties);
 
-        LOGGER.info("Создаем клиент для работы с MongoDB");
+        LOGGER.info("Creating a client for working with MongoDB");
         DBInfo dbInfo = new DBInfo();
         MongoDBClient dbClient = new MongoDBClient(dbInfo.getConnectionUrl());
 
-        LOGGER.info("Создаем клиент для работы с ElasticSearch");
+        LOGGER.info("Creating a client for working with ElasticSearch");
         ElasticSearchApiClient elasticSearchApiClient = new ElasticSearchApiClient();
         final String index = System.getProperty(ES_VACANCY_PROP);
 
-        LOGGER.info("Создаем индекс, если его нет");
+        LOGGER.info("Creating an index if there is none");
         if (!elasticSearchApiClient.isIndexExists(index)) {
             elasticSearchApiClient.createIndex(index);
         }
 
-        LOGGER.info("Загрузка данных из Mongo DB: " + dbInfo.getDataBase()
+        LOGGER.info("Downloading data from Mongo DB: " + dbInfo.getDataBase()
                 + " Collection: " + dbInfo.getCollection()
-                + " в ElasticSearch в Index: " + index);
+                + " in ElasticSearch in the Index: " + index);
         try (var cursor = dbClient.getCursor(dbInfo.getDataBase(), dbInfo.getCollection())) {
             elasticSearchApiClient.downloadDatFromMongo(cursor, index);
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class ElasticSearchRunner {
             elasticSearchApiClient.close();
             dbClient.close();
         }
-        LOGGER.info("Загрузили все данные в индекс " + index);
+        LOGGER.info("Uploaded all the data to the index " + index);
     }
 
 }

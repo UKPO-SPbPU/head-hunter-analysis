@@ -34,7 +34,7 @@ public class ParserRunner {
     private static final String ANSWER_FIELD = "answer";
 
     public static void main(String[] args) {
-        LOGGER.info("Запускаем парсер данных из Mongo");
+        LOGGER.info("Run data parser from Mongo");
         parseData(DB_2019_PROP_FILE, DB_PARSE_2019_PROP_FILE);
         parseData(DB_2024_PROP_FILE, DB_PARSE_2024_PROP_FILE);
     }
@@ -45,34 +45,34 @@ public class ParserRunner {
         MongoDBClient dbClient = new MongoDBClient(dbInfo.getConnectionUrl());
         long countDocument = dbClient.getCountDocument(dbInfo.getDataBase(), dbInfo.getCollection());
         for (int i = 0; i <= countDocument / ONCE_COUNT_DOCUMENTS; i++) {
-            LOGGER.info("Начали фильтрацию от " + i * ONCE_COUNT_DOCUMENTS + " до " + (i + 1) * ONCE_COUNT_DOCUMENTS);
+            LOGGER.info("Started filtering from " + i * ONCE_COUNT_DOCUMENTS + " to " + (i + 1) * ONCE_COUNT_DOCUMENTS);
 
-            LOGGER.info("Выгружаем данные и парсим");
+            LOGGER.info("UNLOAD DATA AND PARSE");
             List<JSONObject> vacancies = new ArrayList<>();
             List<Document> documents = dbClient.getDocuments(
                     dbInfo.getDataBase(),
                     dbInfo.getCollection(),
                     ONCE_COUNT_DOCUMENTS,
-                    i * ONCE_COUNT_DOCUMENTS
-            );
+                    i * ONCE_COUNT_DOCUMENTS);
             documents.forEach(document -> {
                 try {
                     vacancies.add(new JSONObject(String.valueOf(document.get(ANSWER_FIELD))));
                 } catch (JSONException e) {
-                    System.out.println("НЕ СМОГЛИ РАСПАРСИТЬ: " + document.get(ANSWER_FIELD));
+                    System.out.println("COULD NOT PARSE: " + document.get(ANSWER_FIELD));
                 }
             });
 
-            LOGGER.info("Фильтруем по professional_roles");
+            LOGGER.info("Filtering on professional_roles");
             loadProperties(properties2);
             final DBInfo dbInfo2 = new DBInfo();
             List<JSONObject> iTVacancies = vacancies.stream().filter(new ITFilter()).toList();
 
-            LOGGER.info("Фильтруем поля");
+            LOGGER.info("Filtering fields");
             List<JSONObject> iTVacanciesCorrectFields = iTVacancies.stream().map(FieldsFilter::filter).toList();
 
-            LOGGER.info("Загружаем " + iTVacanciesCorrectFields.size() + " вакансий");
-            iTVacanciesCorrectFields.forEach(vac -> dbClient.insertInfoInDB(vac, dbInfo2.getDataBase(), dbInfo2.getCollection()));
+            LOGGER.info("Load " + iTVacanciesCorrectFields.size() + " vacancies");
+            iTVacanciesCorrectFields
+                    .forEach(vac -> dbClient.insertInfoInDB(vac, dbInfo2.getDataBase(), dbInfo2.getCollection()));
         }
         dbClient.close();
     }

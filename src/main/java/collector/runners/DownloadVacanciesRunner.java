@@ -22,7 +22,7 @@ public class DownloadVacanciesRunner {
     private static final String END_ID_PROP = "end_id";
 
     public static void main(String[] args) {
-        LOGGER.info("Начинаем загрузку вакансий за 2019 и за 2024 годы");
+        LOGGER.info("We are starting to upload vacancies for 2019 and 2024 ");
         loadProperties(HH_PROP_FILE);
         download(DB_2024_PROP_FILE);
         download(DB_2019_PROP_FILE);

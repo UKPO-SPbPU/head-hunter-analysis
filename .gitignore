@@ -4,6 +4,7 @@ bin/
 .gradle
 **/build/
 !src/**/build/
+/data
 
 # Ignore Gradle GUI config
 gradle-app.setting
