@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'com.headHunterAnalysis'
@@ -26,7 +27,6 @@ dependencies {
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
 
-
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -47,31 +47,34 @@ tasks.named('jar') {
 }
 
 // Настройка задач для каждого JAR
-task createParserJar(type: Jar) {
+task createParserJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     archiveBaseName.set("parser")
     destinationDirectory.set(file("$buildDir/libs"))
     manifest {
         attributes 'Main-Class': 'parser.runners.ParserRunner'
     }
     from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
 }
 
-task createMongoLoaderJar(type: Jar) {
+task createMongoLoaderJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     archiveBaseName.set("mongo-loader")
     destinationDirectory.set(file("$buildDir/libs"))
     manifest {
         attributes 'Main-Class': 'collector.runners.DownloadVacanciesRunner'
     }
     from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
 }
 
-task createElasticLoaderJar(type: Jar) {
+task createElasticLoaderJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     archiveBaseName.set("elastic-loader")
     destinationDirectory.set(file("$buildDir/libs"))
     manifest {
         attributes 'Main-Class': 'elk.ElasticSearchRunner'
     }
     from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
 }
 
 // Добавление всех задач в зависимость от 'build'
