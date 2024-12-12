@@ -44,14 +44,10 @@ services:
     depends_on:
       - elasticsearch
 
-  # Для запуска приложения используем команды:
-  # docker exec -it java_app run-parser
-  # docker exec -it java_app run-mongo-loader
-  # docker exec -it java_app run-elastic-loader
   java-app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ../Dockerfile
     container_name: java_app
     depends_on:
       - mongodb

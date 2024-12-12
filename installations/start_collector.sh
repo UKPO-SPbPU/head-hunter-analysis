@@ -1,0 +1,1 @@
+docker exec -it java_app run-mongo-loader
