@@ -3,7 +3,7 @@ bin/
 
 .gradle
 **/build/
-!**/build/libs
+!/build/libs
 !src/**/build/
 /data
 
