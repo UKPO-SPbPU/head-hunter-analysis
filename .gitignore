@@ -2,8 +2,7 @@
 bin/
 
 .gradle
-**/build/
-!/build/libs
+**/build/classes
 !src/**/build/
 /data
 
