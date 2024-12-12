@@ -3,6 +3,9 @@ bin/
 
 .gradle
 **/build/classes
+**/build/resources
+**/build/tmp
+**/build/generated
 !src/**/build/
 /data
 
